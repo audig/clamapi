@@ -18,5 +18,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: ${{github.repository}}
           push: true
-          tag_with_ref: true
+          tags: ${{ github.base_ref }}
           add_git_labels: true
