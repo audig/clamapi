@@ -1,0 +1,38 @@
+services:
+  clamav:
+    host: fakehost.com
+    port: 3250
+    timeout: 1000
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: clamapi
+  main:
+    banner-mode: 'off'
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    metrics:
+      enabled: true
+    health:
+      show-details: "ALWAYS"
+      group:
+        readiness:
+          show-details: "ALWAYS"
+          include:
+            - readinessState
+            - clamaAvConnection
+
