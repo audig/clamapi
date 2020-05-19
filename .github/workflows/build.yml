@@ -1,7 +1,9 @@
 name: Build
 on:
-  pull_request:
-    branches: [ master ]
+  push:
+    branches:
+      - '*'
+      - '!master'
 jobs:
   build:
     name: Build
@@ -18,5 +20,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: ${{github.repository}}
           push: true
-          tags: ${{ github.ref }}
+          tag_with_ref: true
           add_git_labels: true
