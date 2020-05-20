@@ -28,35 +28,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Semantic release dry-run
-        id: semantic
-        uses: cycjimmy/semantic-release-action@v2
-        if: github.ref != 'refs/heads/master'
-        with:
-          dry_run: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Get version
-        id: get_version
-        if: github.ref != 'refs/heads/master'
-        run: echo ::set-output name=VERSION::$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.6.0:exec)
-
-      - name: Check version semantic release
-        id: verify_version
-        if: github.ref != 'refs/heads/master'
-        run: |
-          exitCode=0
-          if [[ "${{ steps.get_version.outputs.VERSION }}" == *"-SNAPSHOT"* ]]; then
-            echo "Snapshot version are forbidden on master branch"
-            exitCode=1
-          fi
-          if [[ "${{ steps.get_version.outputs.VERSION }}" != "${{ steps.semantic.outputs.new_release_version }}" ]]; then
-            echo "Please update the pom version to ${{ steps.semantic.outputs.new_release_version }}"
-            exitCode=1
-          fi
-          exit $exitCode
-
       - name: Maven Package
         run: mvn -B package
 
