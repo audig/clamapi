@@ -37,7 +37,10 @@ jobs:
       - name: Push jib image
         if: github.ref == 'refs/heads/master'
         run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:build
-
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          
       - name: Semantic release
         uses: cycjimmy/semantic-release-action@v2
         if: github.ref == 'refs/heads/master'
