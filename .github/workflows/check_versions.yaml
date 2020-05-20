@@ -19,10 +19,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get version
-        id: get_version
-        run: echo ::set-output name=
-
       - name: Check version semantic release
         id: verify_version
         if: github.ref != 'refs/heads/master'
