@@ -1,3 +1,4 @@
+name: check-versions
 on:
   pull_request:
     branches: [ master ]
