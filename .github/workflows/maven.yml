@@ -34,7 +34,7 @@ jobs:
         if: github.ref != 'refs/heads/master'
         with:
           dry_run: true
-          branches: ${GITHUB_REF:11}
+          branch: ${GITHUB_REF:11}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
