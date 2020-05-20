@@ -1,6 +1,8 @@
 ci: false
 plugins:
-  - "@semantic-release/github"
+  - - "@semantic-release/github"
+      assets:
+      - path: "./target/clamapi*.jar"
   - "@semantic-release/commit-analyzer"
   - "@semantic-release/release-notes-generator"
 
