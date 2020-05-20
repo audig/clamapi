@@ -1,0 +1,47 @@
+name: Check Versions
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  check-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Semantic release dry-run
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          dry_run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=
+
+      - name: Check version semantic release
+        id: verify_version
+        if: github.ref != 'refs/heads/master'
+        run: |
+          VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.6.0:exec)
+          exitCode=0
+          listError=""
+          if [[ $VERSION == *"-SNAPSHOT"* ]]; then
+            exitCode=1
+            listError="Snapshot version are forbidden on PR for master branch\n"
+          fi
+          if [[ $VERSION != "${{ steps.semantic.outputs.new_release_version }}" ]]; then
+            exitCode=1
+            listError="${listError}Please update the pom version to ${{ steps.semantic.outputs.new_release_version }}\n"
+          fi
+          echo $listError
+          exit $exitCode
+
+
+
+
+
