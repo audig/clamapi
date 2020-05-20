@@ -1,4 +1,5 @@
-name: check-versions
+name: Check Versions
+
 on:
   pull_request:
     branches: [ master ]
@@ -25,7 +26,7 @@ jobs:
           VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.6.0:exec)
           exitCode=0
           listError=""
-          if [[ $(mvn dependency:list | grep -i snapshot) ]]; then
+          if [[ ! $(mvn dependency:list | grep -i snapshot) ]]; then
             exitCode=1
             listError="Snapshot version in dependencies are forbidden\n"
           fi
@@ -37,7 +38,7 @@ jobs:
             exitCode=1
             listError="${listError}Please update the pom version to ${{ steps.semantic.outputs.new_release_version }}\n"
           fi
-          echo -e  $listError
+          echo $listError
           exit $exitCode
 
 
