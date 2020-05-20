@@ -28,8 +28,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - uses: cycjimmy/semantic-release-action@v2
+      - name: Semantic release dry-run
         id: semantic
+        uses: cycjimmy/semantic-release-action@v2
         if: github.ref == 'refs/heads/master'
         with:
           dry_run: true
@@ -42,14 +43,12 @@ jobs:
 
       - name: Maven Package
         run: mvn -B package
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Maven Jib Docker
-        run: mvn com.google.cloud.tools:jib-maven-plugin:2.2.0:dockerBuild
+        run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:dockerBuild
 
-      - uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
+      - name: Update version to release
+        uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
         if: github.ref == 'refs/heads/master'
         with:
           add: pom.xml
@@ -57,7 +56,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
 
-      - uses: cycjimmy/semantic-release-action@v2
+      - name: Semantic release
+        uses: cycjimmy/semantic-release-action@v2
         if: github.ref == 'refs/heads/master'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
