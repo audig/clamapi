@@ -3,8 +3,6 @@ name: Check Versions
 on:
   pull_request:
     branches: [ master ]
-    paths: 
-    - pom.xml
 
 jobs:
   check-versions:
@@ -28,6 +26,10 @@ jobs:
           VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.6.0:exec)
           exitCode=0
           listError=""
+          if [[ ! $(mvn dependency:list | grep -i snapshot) ]]; then
+            exitCode=1
+            listError="Snapshot version in dependencies are forbidden\n"
+          fi
           if [[ $VERSION == *"-SNAPSHOT"* ]]; then
             exitCode=1
             listError="Snapshot version are forbidden on PR for master branch\n"
