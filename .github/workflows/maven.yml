@@ -1,0 +1,66 @@
+name: Java CI with Maven
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '14'
+
+      - name: Setup maven cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: cycjimmy/semantic-release-action@v2
+        id: semantic
+        if: github.ref == 'refs/heads/master'
+        with:
+          dry_run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Maven update version to semantic version
+        if: github.ref == 'refs/heads/master'
+        run: mvn -B versions:set -DnewVersion=${{steps.semantic.outputs.new_release_version}}
+
+      - name: Maven Package
+        run: mvn -B package
+        env:
+          - DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          - DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+              -
+      - name: Maven Jib Docker
+        run: mvn com.google.cloud.tools:jib-maven-plugin:2.2.0:dockerBuild
+
+      - uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
+        if: github.ref == 'refs/heads/master'
+        with:
+          add: pom.xml
+          message: Release version ${{steps.semantic.outputs.new_release_version}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+
+      - uses: cycjimmy/semantic-release-action@v2
+        if: github.ref == 'refs/heads/master'
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+

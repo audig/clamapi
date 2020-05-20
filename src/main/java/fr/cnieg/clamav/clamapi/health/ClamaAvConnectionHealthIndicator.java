@@ -1,4 +1,4 @@
-package fr.cnieg.clamav.clamapi.configuration.health;
+package fr.cnieg.clamav.clamapi.health;
 
 import java.io.IOException;
 import java.net.Socket;

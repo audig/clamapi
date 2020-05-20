@@ -48,7 +48,7 @@ public class ScanService {
             try {
                 file.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Failed to close InpuStream: {}", e.getMessage());
             }
         }
     }
