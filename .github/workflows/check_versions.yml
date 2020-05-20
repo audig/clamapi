@@ -37,7 +37,7 @@ jobs:
             exitCode=1
             listError="${listError}Please update the pom version to ${{ steps.semantic.outputs.new_release_version }}\n"
           fi
-          echo $listError
+          echo -e  $listError
           exit $exitCode
 
 
