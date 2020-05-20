@@ -2,6 +2,7 @@ name: Java CI with Maven
 
 on:
   push:
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -42,9 +43,9 @@ jobs:
       - name: Maven Package
         run: mvn -B package
         env:
-          - DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          - DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-              -
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Maven Jib Docker
         run: mvn com.google.cloud.tools:jib-maven-plugin:2.2.0:dockerBuild
 
