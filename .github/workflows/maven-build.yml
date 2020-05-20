@@ -1,4 +1,4 @@
-name: Maven java & jib build
+name: maven-build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  maven-build:
 
     runs-on: ubuntu-latest
 
