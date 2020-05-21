@@ -1,4 +1,4 @@
-![Release](https://github.com/audig/clamapi/workflows/release/badge.svg)
+![Release](https://github.com/audig/clamapi/workflows/maven-release/badge.svg)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=audig/clamapi)](https://dependabot.com)
 # CLAMAPI
 
