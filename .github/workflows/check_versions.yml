@@ -10,17 +10,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+          with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: npm install -g semantic-release
+
       - name: Semantic release dry-run
         id: semantic
-        uses: cycjimmy/semantic-release-action@v2
-        with:
-          dry_run: true
+        run: semantic-release --dry-run --ci false --branches ${GITHUB_REF:11}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check version semantic release
         id: verify_version
-        if: github.ref != 'refs/heads/master'
         run: |
           VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.6.0:exec)
           exitCode=0

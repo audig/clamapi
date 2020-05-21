@@ -1,8 +1,6 @@
 name: maven-build
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -34,15 +32,6 @@ jobs:
       - name: Build jib image
         run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:dockerBuild
 
-      - name: Push jib image
-        if: github.ref == 'refs/heads/master'
-        run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:build
-
-      - name: Semantic release
-        uses: cycjimmy/semantic-release-action@v2
-        if: github.ref == 'refs/heads/master'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
