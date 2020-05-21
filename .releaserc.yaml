@@ -43,6 +43,8 @@ plugins:
           - type: ci
             section: Continuous Integration
             hidden: 'true'
+  - - "@semantic-release/exec"
+    - verifyReleaseCmd: 'echo ::set-output name=new_release_version::${nextRelease.version}'
   - - "@semantic-release/github"
     - assets:
         - path: ./target/clamapi*.jar
