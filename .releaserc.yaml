@@ -1,3 +1,4 @@
+tagFormat: ${version}
 plugins:
   - - "@semantic-release/commit-analyzer"
     - preset: conventionalcommits
@@ -44,7 +45,7 @@ plugins:
             section: Continuous Integration
             hidden: 'true'
   - - "@semantic-release/exec"
-    - verifyReleaseCmd: 'echo ::set-output name=new_release_version::${nextRelease.version}'
+    - verifyReleaseCmd: 'if [ "${nextRelease.version}" != "" ]; then ::set-output name=new_release_version::${nextRelease.version};fi'
   - - "@semantic-release/github"
     - assets:
         - path: ./target/clamapi*.jar
