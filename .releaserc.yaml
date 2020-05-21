@@ -12,7 +12,7 @@ plugins:
         types:
           - type: build
             scope: deps
-            secrtion: deps
+            section: deps
           - type: feat
             section: Features
           - type: feature
