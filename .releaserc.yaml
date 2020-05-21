@@ -10,9 +10,6 @@ plugins:
     - preset: conventionalcommits
       presetConfig:
         types:
-          - type: build
-            scope: deps
-            section: deps
           - type: feat
             section: Features
           - type: feature
@@ -40,7 +37,6 @@ plugins:
             hidden: 'true'
           - type: build
             section: Build System
-            hidden: 'true'
           - type: ci
             section: Continuous Integration
             hidden: 'true'
