@@ -53,7 +53,7 @@ jobs:
 
       - name: Semantic release
         id: semantic
-        run: semantic-release --skip-maven-deploy
+        run: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
