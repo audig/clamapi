@@ -1,0 +1,72 @@
+name: maven-release
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  maven-release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '14'
+
+      - name: Setup maven cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: npm install -g semantic-release conventional-changelog-conventionalcommits @semantic-release/exec
+
+      - name: Semantic release dry-run
+        id: semantic-dry-run
+        run: semantic-release --dry-run --ci false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upgrade pom version
+        run: mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
+
+      - name: Maven Package
+        run: mvn -B package
+
+      - name: Push jib image
+        run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:build
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push release version in pom
+        uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
+        with:
+          add: 'pom.xml'
+          message: "ci: Bump application version to ${{ steps.semantic.outputs.new_release_version }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+
+      - name: Semantic release
+        id: semantic
+        run: semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+
+
