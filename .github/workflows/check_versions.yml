@@ -27,7 +27,7 @@ jobs:
 
       - name: Semantic release dry-run
         id: semantic
-        run: semantic-release --dry-run --ci false --branches ${GITHUB_REF:11}
+        run: semantic-release --dry-run --ci false --branches ${{GITHUB_REF:11}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
