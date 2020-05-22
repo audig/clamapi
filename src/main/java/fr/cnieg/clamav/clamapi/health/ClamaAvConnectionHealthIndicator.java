@@ -1,7 +1,6 @@
 package fr.cnieg.clamav.clamapi.health;
 
 import java.io.IOException;
-import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,20 +9,22 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
+import fr.cnieg.clamav.clamapi.services.ClamAVService;
 import fr.cnieg.clamav.clamapi.services.ScanService;
 
 @Component
 public class ClamaAvConnectionHealthIndicator implements HealthIndicator {
 
     @Autowired
-    private ScanService scanService;
+    private ClamAVService clamAVService;
 
     Logger logger = LoggerFactory.getLogger(ScanService.class);
 
     public Health health() {
-        try (Socket socket = new Socket(scanService.getClamavHost(), scanService.getClamavPort())) {
+        try {
+            clamAVService.ping();
         } catch (IOException e) {
-            logger.error("Failed to open socket to {}:{}", scanService.getClamavHost(), scanService.getClamavPort());
+            logger.error("Failed to ping clamav: {}", e.getMessage());
             return Health.down().withDetail("ClamAv Connection down", e.getMessage()).build();
         }
 
