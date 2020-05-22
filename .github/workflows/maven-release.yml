@@ -38,7 +38,7 @@ jobs:
         id: semantic-dry-run
         run: semantic-release --dry-run --ci false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
 
       - name: Upgrade pom version
         if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
