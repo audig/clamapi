@@ -1,5 +1,6 @@
 ![Release](https://github.com/audig/clamapi/workflows/maven-release/badge.svg)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=audig/clamapi)](https://dependabot.com)
+[![codecov](https://codecov.io/gh/audig/clamapi/branch/master/graph/badge.svg)](https://codecov.io/gh/audig/clamapi)
 # CLAMAPI
 
 Api to submit a file to clamav and get the information is the file is infected.
