@@ -4,12 +4,13 @@ on:
   pull_request:
     branches: [ master ]
 
-jobs:
-  maven-build:
 
+jobs:
+  test:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -25,22 +26,39 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-
-      - name: Maven Package
-        run: mvn -B package
+      - name: Maven Test
+        run: mvn -B test
 
       - name: Code coverage report
         uses: codecov/codecov-action@v1
         with:
-         token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-         fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          fail_ci_if_error: true
 
 
+  package:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '14'
+
+      - name: Setup maven cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Maven Package
+        run: mvn -B package -DskipTests
 
       - name: Build jib image
         run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:dockerBuild
-
-
-
-
-

@@ -26,23 +26,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12
-
-      - name: Install dependencies
-        run: npm install -g semantic-release conventional-changelog-conventionalcommits @semantic-release/exec
-
-      - name: Semantic release dry-run
+      - name: Semantic Release
         id: semantic-dry-run
-        run: semantic-release --dry-run --ci false
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upgrade pom version
-        if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
-        run: mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
+          if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
+          run: mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
 
       - name: Maven Package
         run: mvn -B package
@@ -60,23 +54,8 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Commit Pom
-
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add pom.xml
-          git commit -m "ci: Bump application version to ${{ steps.semantic-dry-run.outputs.new_release_version }}" -a
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
-
-
-      - name: Semantic release
-        if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
-        id: semantic
-        run: semantic-release
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
