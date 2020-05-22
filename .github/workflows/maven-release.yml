@@ -60,20 +60,14 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Commit Pom
+      - name: Push release version in pom
         if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add pom.xml
-          git commit -m "ci: Bump application version to ${{ steps.semantic-dry-run.outputs.new_release_version }}" -a
-
-      - name: Push changes
-        if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
-        uses: ad-m/github-push-action@master
+        uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
         with:
-          force: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          add: 'pom.xml'
+          message: "ci: Bump application version to ${{ steps.semantic-dry-run.outputs.new_release_version }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
 
       - name: Semantic release
         if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
