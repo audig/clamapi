@@ -28,14 +28,13 @@ jobs:
 
       - name: Maven Package
         run: mvn -B package
-        
+
       - name: Code coverage report
         uses: codecov/codecov-action@v1
         with:
          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-         file: ./target/coverage.xml
          fail_ci_if_error: true
-    
+
 
 
       - name: Build jib image
