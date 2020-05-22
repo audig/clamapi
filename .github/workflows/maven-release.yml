@@ -47,6 +47,12 @@ jobs:
       - name: Maven Package
         run: mvn -B package
 
+      - name: Code coverage report
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          fail_ci_if_error: true
+
       - name: Push jib image
         if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
         run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:build
