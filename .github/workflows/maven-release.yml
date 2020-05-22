@@ -66,6 +66,7 @@ jobs:
         with:
           add: 'pom.xml'
           message: "ci: Bump application version to ${{ steps.semantic.outputs.new_release_version }}"
+          force: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
 
