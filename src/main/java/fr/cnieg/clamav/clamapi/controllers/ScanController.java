@@ -5,7 +5,7 @@ import java.io.IOException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import fr.cnieg.clamav.clamapi.beans.ClamAvResponse;
 import fr.cnieg.clamav.clamapi.services.ClamAvException;
 import fr.cnieg.clamav.clamapi.services.ScanService;
 
-@Api("Api to submit a file and get the result of the scan. idClient is used to log if the file is infected")
+@Tag(name = "ScanService", description = "Api to submit a file and get the result of the scan. idClient is used to log if the file is infected")
 @RestController
 public class ScanController {
 
