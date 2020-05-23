@@ -31,6 +31,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: debug-node
+        run: export && env
+
       - name: Setup node cache
         uses: actions/cache@v1
         with:
