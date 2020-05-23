@@ -13,6 +13,9 @@ spring:
   main:
     banner-mode: 'off'
 
+springdoc:
+  api-docs.enabled: false
+
 management:
   metrics:
     tags:
