@@ -37,7 +37,9 @@ jobs:
 
       - name: Upgrade pom version
         if: ${{ steps.semantic-dry-run.outputs.new_release_published }}
-        run: mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
+        run:
+          mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
+          rm -Rf node_modules
 
       - name: Maven Package
         run: mvn -B package
