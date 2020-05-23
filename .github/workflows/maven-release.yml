@@ -34,13 +34,13 @@ jobs:
       - name: debug-node
         run: export && env
 
-      - name: Setup node cache
-        uses: actions/cache@v1
-        with:
-          path: ${{NODE_MODULES}}
-          key: ${{ runner.os }}-node-semantic
-          restore-keys: |
-            ${{ runner.os }}-node-
+      #      - name: Setup node cache
+      #        uses: actions/cache@v1
+      #        with:
+      #          path: ${{NODE_MODULES}}
+      #          key: ${{ runner.os }}-node-semantic
+      #          restore-keys: |
+      #            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm install -g semantic-release conventional-changelog-conventionalcommits @semantic-release/exec
