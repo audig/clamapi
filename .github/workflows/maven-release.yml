@@ -18,6 +18,11 @@ jobs:
         with:
           java-version: '14'
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
       - name: Setup maven cache
         uses: actions/cache@v1
         with:
@@ -26,20 +31,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Semantic Release
-        id: semantic-dry-run
-        uses: cycjimmy/semantic-release-action@v2
+      - name: Setup node cache
+        uses: actions/cache@v1
         with:
-          dry_run: true
-          extra_plugins: conventional-changelog-conventionalcommits
+          path: ${{NODE_MODULES}}
+          key: ${{ runner.os }}-node-semantic
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install -g semantic-release conventional-changelog-conventionalcommits @semantic-release/exec
+
+      - name: Semantic release dry-run
+        id: semantic-dry-run
+        run: semantic-release --dry-run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upgrade pom version
-        if: ${{ steps.semantic-dry-run.outputs.new_release_published }}
-        run: |
-          mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
-          rm -Rf node_modules
+        if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
+        run: mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
 
       - name: Maven Package
         run: mvn -B package
@@ -51,17 +62,15 @@ jobs:
           fail_ci_if_error: true
 
       - name: Push jib image
-        if: ${{ steps.semantic-dry-run.outputs.new_release_published }}
+        if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
         run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:build
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v2
-        with:
-          dry_run: false
-          extra_plugins: conventional-changelog-conventionalcommits
+      - name: Semantic release
+        if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
+        run: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
