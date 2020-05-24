@@ -31,7 +31,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-
       - name: Setup node cache
         uses: actions/cache@v1
         with:
