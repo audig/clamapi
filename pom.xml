@@ -139,6 +139,12 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>fr.cnieg.clamav.clamapi.ClamapiApplication</exclude>
+                        <exclude>fr.cnieg.clamav.clamapi.services.ClamAVService</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
