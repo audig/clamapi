@@ -43,12 +43,11 @@ You can pass additional variable env to increse the scan timeout :
 -  SERVICES_CLAMAV_TIMEOUT : time in ms
 
 ## Metrics
-All metrics are available under `/actuator/metrics` and can be scrape by prometheus
+All metrics are available under `/actuator/prometheus` and can be scrape by prometheus
 
-Some custom metrics are available at :
-- `/actuator/metrics/clamav_scan` : number of scan
-- `/actuator/metrics/clamav_infected` : number of infected file 
-- `/actuator/metrics/scan_duration` : in second total time to scan file
+Some custom metrics are available at `/actuator/prometheus`:
+- `clamav_scan` : Counter and timer for Clamav scan
+- `clamav_scan_infected` : Counter for infected Clamav scan 
 
 ## Deployment with helm in kubernetes
 

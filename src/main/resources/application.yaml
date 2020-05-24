@@ -23,12 +23,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: 'info,health,prometheus'
   health:
     probes:
       enabled: true
   endpoint:
-    metrics:
+    prometheus:
       enabled: true
     health:
       show-details: "ALWAYS"

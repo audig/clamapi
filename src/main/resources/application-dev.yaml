@@ -1,3 +1,10 @@
 springdoc:
   api-docs.enabled: true
   packages-to-scan: fr.cnieg.clamav.clamapi.controllers
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: '*'
