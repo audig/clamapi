@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import fi.solita.clamav.ClamAVClient;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,25 @@ public class ScanService {
     @Autowired
     private ClamAVService clamAVService;
 
+    @Autowired
+    MeterRegistry meterRegistry;
+
+    Counter scanCounter;
+    Counter scanInfectedCounter;
+
+    public ScanService(MeterRegistry registry) {
+        scanCounter = registry.counter("clamav_scan");
+        scanInfectedCounter = registry.counter("clamav_scan_infected");
+    }
+
+    @Timed("clamav_scan")
     public ClamAvResponse scan(final InputStream file) throws ClamAvException {
         byte[] reply = clamAVService.scan(file);
-        return new ClamAvResponse(!ClamAVClient.isCleanReply(reply), new String(reply, StandardCharsets.US_ASCII));
+        ClamAvResponse clamAvResponse = new ClamAvResponse(!ClamAVClient.isCleanReply(reply), new String(reply, StandardCharsets.US_ASCII));
+        scanCounter.increment();
+        if (clamAvResponse.isInfected()) {
+            scanInfectedCounter.increment();
+        }
+        return clamAvResponse;
     }
 }

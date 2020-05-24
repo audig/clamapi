@@ -15,13 +15,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: 'health'
   health:
     probes:
       enabled: true
   endpoint:
-    metrics:
-      enabled: true
     health:
       show-details: "ALWAYS"
       group:
