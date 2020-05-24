@@ -4,14 +4,9 @@ services:
     port: 3250
     timeout: 1000
 
-server:
-  port: 8080
-
 spring:
   application:
     name: clamapi
-  main:
-    banner-mode: 'off'
 
 management:
   metrics:
@@ -35,4 +30,3 @@ management:
           include:
             - readinessState
             - clamaAvConnection
-
