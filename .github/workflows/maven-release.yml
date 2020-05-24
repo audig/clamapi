@@ -35,7 +35,7 @@ jobs:
       - name: Setup node cache
         uses: actions/cache@v1
         with:
-          path: /opt/hostedtoolcache/node/12.16.3/x64/bin/
+          path: /opt/hostedtoolcache/node/12.16.3/x64/lib/node_modules
           key: ${{ runner.os }}-node-semantic
           restore-keys: |
             ${{ runner.os }}-node-
