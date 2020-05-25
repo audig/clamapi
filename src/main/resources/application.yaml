@@ -1,7 +1,7 @@
 services:
   clamav:
-    host:
-    port:
+    host: toto
+    port: 10
     timeout: 1000
 
 server:
@@ -15,6 +15,9 @@ spring:
 
 springdoc:
   api-docs.enabled: false
+
+logging:
+  level.root: info
 
 management:
   metrics:
