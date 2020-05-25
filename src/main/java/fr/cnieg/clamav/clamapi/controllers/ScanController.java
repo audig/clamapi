@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,13 +29,10 @@ public class ScanController {
     @Autowired
     ScanService scanService;
 
-    @PostMapping("/Scan")
-    public ResponseEntity scan(@RequestParam(value = "idClient", defaultValue = "UNDEFINED") String idClient,
-        @RequestPart(value = "file") MultipartFile file) throws IOException, ClamAvException {
-
-        ClamAvResponse clamAvResponse = null;
+    @PostMapping(path = "/Scan", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
+    public ResponseEntity scan(@RequestParam(defaultValue = "UNDEFINED") String idClient, MultipartFile file) throws IOException, ClamAvException {
         try {
-            clamAvResponse = scanService.scan(file.getInputStream());
+            ClamAvResponse clamAvResponse = scanService.scan(file.getInputStream());
             if (clamAvResponse.isInfected()) {
                 String message = "File " + file.getOriginalFilename() + " infected for IdClient " + idClient + ": " + clamAvResponse.getMessage();
                 logger.info(message);
