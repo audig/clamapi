@@ -19,15 +19,16 @@ jobs:
         with:
           java-version: '14'
 
-      - name: Setup maven cache
+      - name: Setup gradle cache
         uses: actions/cache@v1
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
-      - name: Maven Test
-        run: mvn -B test
+            ${{ runner.os }}-gradle-
+
+      - name: Gradle test
+        run: ./gradlew test
 
       - name: Code coverage report
         uses: codecov/codecov-action@v1
@@ -49,15 +50,16 @@ jobs:
         with:
           java-version: '14'
 
-      - name: Setup maven cache
+      - name: Setup gradle cache
         uses: actions/cache@v1
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
-      - name: Maven Package
-        run: mvn -B package -DskipTests
+            ${{ runner.os }}-gradle-
+
+      - name: Gradle build
+        run: ./gradlew build
 
       - name: Build jib image
-        run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:dockerBuild
+        run: ./gradlew jibDockerbuild
