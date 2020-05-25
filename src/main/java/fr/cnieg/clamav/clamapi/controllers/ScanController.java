@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,18 +31,14 @@ public class ScanController {
     ScanService scanService;
 
     @PostMapping(path = "/Scan", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public ResponseEntity scan(@RequestParam(defaultValue = "UNDEFINED") String idClient, MultipartFile file) throws IOException, ClamAvException {
-        try {
-            ClamAvResponse clamAvResponse = scanService.scan(file.getInputStream());
-            if (clamAvResponse.isInfected()) {
-                String message = "File " + file.getOriginalFilename() + " infected for IdClient " + idClient + ": " + clamAvResponse.getMessage();
-                logger.info(message);
-                return new ResponseEntity(message, HttpStatus.NOT_ACCEPTABLE);
-            }
-            return new ResponseEntity(HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            logger.error("Error when get inputstream from file {}", file.getOriginalFilename());
-            throw e;
+        ClamAvResponse clamAvResponse = scanService.scan(file.getInputStream());
+        if (clamAvResponse.isInfected()) {
+            String message = "File " + file.getOriginalFilename() + " infected for IdClient " + idClient + ": " + clamAvResponse.getMessage();
+            logger.info(message);
+            return new ResponseEntity(message, HttpStatus.NOT_ACCEPTABLE);
         }
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 }
