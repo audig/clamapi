@@ -10,9 +10,6 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
 
-group = 'fr.cnieg.clamav'
-version = '1.0.0-SNAPSHOT'
-description = 'clamapi'
 sourceCompatibility = '1.14'
 
 configurations {

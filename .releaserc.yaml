@@ -44,6 +44,6 @@ plugins:
     - verifyReleaseCmd: 'if [ "${nextRelease.version}" != "" ]; then echo ::set-output name=new_release_version::${nextRelease.version};fi'
   - - "@semantic-release/github"
     - assets:
-        - path: ./target/clamapi*.jar
+        - path: ./build/libs/clamapi*.jar
           label: Clamapi Jar
 

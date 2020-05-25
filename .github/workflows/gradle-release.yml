@@ -1,11 +1,11 @@
-name: maven-release
+name: gradle-release
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  maven-release:
+  gradle-release:
 
     runs-on: ubuntu-latest
 
@@ -23,13 +23,13 @@ jobs:
         with:
           node-version: 12
 
-      - name: Setup maven cache
+      - name: Setup gradle cache
         uses: actions/cache@v1
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
+            ${{ runner.os }}-gradle-
 
       - name: Setup node cache
         uses: actions/cache@v1
@@ -52,8 +52,8 @@ jobs:
         if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
         run: mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
 
-      - name: Maven Package
-        run: mvn -B package
+      - name: Gradle Package
+        run: ./gradlew package
 
       - name: Code coverage report
         uses: codecov/codecov-action@v1
@@ -63,7 +63,7 @@ jobs:
 
       - name: Push jib image
         if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
-        run: mvn -B com.google.cloud.tools:jib-maven-plugin:2.2.0:build
+        run: ./gradelw jib
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
