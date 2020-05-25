@@ -4,6 +4,10 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+### Gradle ###
+build
+.gradle
+out
 ### Node ###
 node_modules
 package-lock.json
