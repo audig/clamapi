@@ -1,5 +1,4 @@
 ignore:
   # ignore Main spring boot
   - "src/main/java/fr/cnieg/clamav/clamapi/ClamapiApplication.java"
-  # ignore client clamav
-  - "src/main/java/fr/cnieg/clamav/clamapi/services/ClamAVService.java"
+
