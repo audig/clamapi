@@ -48,10 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upgrade pom version
-        if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
-        run: mvn versions:set -DnewVersion=${{ steps.semantic-dry-run.outputs.new_release_version }}
-
+     
       - name: Gradle Package
         run: ./gradlew package
 
