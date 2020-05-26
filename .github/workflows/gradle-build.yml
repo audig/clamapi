@@ -59,7 +59,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Gradle build
-        run: ./gradlew build
+        run: ./gradlew bootJar
 
       - name: Build jib image
         run: ./gradlew jibDockerbuild
