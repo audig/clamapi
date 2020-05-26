@@ -1,5 +1,6 @@
 package fr.cnieg.clamav.clamapi.services;
 
+import fi.solita.clamav.ClamAVClient;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
@@ -9,11 +10,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @Configuration
-public class ClamAVServiceTestConfiguration {
+public class ClamAVClientTestConfiguration {
 
     @Bean
     @Primary
-    public ClamAVService scan() {
-        return Mockito.mock(ClamAVService.class);
+    public ClamAVClient clamAVClient() {
+        return Mockito.mock(ClamAVClient.class);
     }
 }

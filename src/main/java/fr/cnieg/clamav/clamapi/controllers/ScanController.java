@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import fr.cnieg.clamav.clamapi.beans.ClamAvResponse;
-import fr.cnieg.clamav.clamapi.services.ClamAvException;
 import fr.cnieg.clamav.clamapi.services.ScanService;
 
 @Tag(name = "ScanService", description = "Api to submit a file and get the result of the scan. idClient is used to log if the file is infected")
@@ -32,7 +31,7 @@ public class ScanController {
 
     @PostMapping(path = "/Scan", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    public ResponseEntity scan(@RequestParam(defaultValue = "UNDEFINED") String idClient, MultipartFile file) throws IOException, ClamAvException {
+    public ResponseEntity scan(@RequestParam(defaultValue = "UNDEFINED") String idClient, MultipartFile file) throws IOException {
         ClamAvResponse clamAvResponse = scanService.scan(file.getInputStream());
         if (clamAvResponse.isInfected()) {
             String message = "File " + file.getOriginalFilename() + " infected for IdClient " + idClient + ": " + clamAvResponse.getMessage();

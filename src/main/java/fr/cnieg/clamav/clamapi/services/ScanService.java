@@ -1,5 +1,6 @@
 package fr.cnieg.clamav.clamapi.services;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -20,7 +21,7 @@ public class ScanService {
     private final Logger logger = LoggerFactory.getLogger(ScanService.class);
 
     @Autowired
-    private ClamAVService clamAVService;
+    ClamAVClient clamAVClient;
 
     @Autowired
     MeterRegistry meterRegistry;
@@ -34,8 +35,8 @@ public class ScanService {
     }
 
     @Timed("clamav_scan")
-    public ClamAvResponse scan(final InputStream file) throws ClamAvException {
-        byte[] reply = clamAVService.scan(file);
+    public ClamAvResponse scan(final InputStream file) throws IOException {
+        byte[] reply = clamAVClient.scan(file);
         ClamAvResponse clamAvResponse = new ClamAvResponse(!ClamAVClient.isCleanReply(reply), new String(reply, StandardCharsets.US_ASCII));
         scanCounter.increment();
         if (clamAvResponse.isInfected()) {

@@ -10,12 +10,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
+import fi.solita.clamav.ClamAVClient;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -27,7 +29,8 @@ import fr.cnieg.clamav.clamapi.beans.ClamAvResponse;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@Import({ ScanService.class, ClamAVService.class })
+@AutoConfigureMockMvc
+@Import({ ScanService.class })
 public class ScanServiceTest {
 
     private InputStream fileToScan;
@@ -36,7 +39,7 @@ public class ScanServiceTest {
     ScanService scanService;
 
     @MockBean
-    ClamAVService clamAVService;
+    ClamAVClient clamAVClient;
 
     @Autowired
     MeterRegistry meterRegistry;
@@ -56,7 +59,7 @@ public class ScanServiceTest {
         double lastValueOfClamAvScanCounter = meterRegistry.get("clamav_scan").counter().count();
         double lastValueOfClamAvScanInfectedCounter = meterRegistry.get("clamav_scan_infected").counter().count();
 
-        Mockito.when(clamAVService.scan(Mockito.isA(InputStream.class))).thenReturn(responseClamav);
+        Mockito.when(clamAVClient.scan(Mockito.isA(InputStream.class))).thenReturn(responseClamav);
         ClamAvResponse clamAvResponse = scanService.scan(fileToScan);
 
         assertFalse(clamAvResponse.isInfected());
@@ -72,7 +75,7 @@ public class ScanServiceTest {
         double lastValueOfClamAvScanCounter = meterRegistry.get("clamav_scan").counter().count();
         double lastValueOfClamAvScanInfectedCounter = meterRegistry.get("clamav_scan_infected").counter().count();
 
-        Mockito.when(clamAVService.scan(Mockito.isA(InputStream.class))).thenReturn(responseClamav);
+        Mockito.when(clamAVClient.scan(Mockito.isA(InputStream.class))).thenReturn(responseClamav);
 
         ClamAvResponse clamAvResponse = scanService.scan(fileToScan);
 
@@ -85,14 +88,13 @@ public class ScanServiceTest {
     @Test
     public void givenFile_whenScan_thenReturnIoException() throws Exception {
 
-        byte[] responseClamav = "OK".getBytes();
         String expectedExceptionMessage = "Cannot connect to ClamAv";
         double lastValueOfClamAvScanCounter = meterRegistry.get("clamav_scan").counter().count();
         double lastValueOfClamAvScanInfectedCounter = meterRegistry.get("clamav_scan_infected").counter().count();
 
-        Mockito.when(clamAVService.scan(Mockito.isA(InputStream.class))).thenThrow(new ClamAvException(expectedExceptionMessage));
+        Mockito.when(clamAVClient.scan(Mockito.isA(InputStream.class))).thenThrow(new IOException(expectedExceptionMessage));
 
-        ClamAvException exception = assertThrows(ClamAvException.class, () -> {
+        IOException exception = assertThrows(IOException.class, () -> {
             scanService.scan(fileToScan);
         });
 
