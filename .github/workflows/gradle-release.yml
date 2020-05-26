@@ -50,7 +50,7 @@ jobs:
 
      
       - name: Gradle Package
-        run: ./gradlew package
+        run: ./gradlew bootJar
 
       - name: Code coverage report
         uses: codecov/codecov-action@v1
