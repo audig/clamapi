@@ -60,7 +60,7 @@ jobs:
 
       - name: Push jib image
         if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
-        run: ./gradelw jib
+        run: ./gradlew jib
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
