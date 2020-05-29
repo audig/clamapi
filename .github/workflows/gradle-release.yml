@@ -48,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-     
+
       - name: Gradle Package
         run: ./gradlew bootJar
 
@@ -60,7 +60,7 @@ jobs:
 
       - name: Push jib image
         if: ${{ steps.semantic-dry-run.outputs.new_release_version }}
-        run: ./gradlew jib
+        run: ./gradlew jib -Djib.to.tags=${{ steps.semantic-dry-run.outputs.new_release_version }}
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
