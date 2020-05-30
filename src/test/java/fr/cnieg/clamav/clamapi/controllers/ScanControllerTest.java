@@ -57,7 +57,7 @@ public class ScanControllerTest {
 
         String idClient = "123456";
 
-        mvc.perform(MockMvcRequestBuilders.multipart("/Scan").file(fileToScan).queryParam("idClient", idClient)
+        mvc.perform(MockMvcRequestBuilders.multipart("/scan").file(fileToScan).queryParam("idClient", idClient)
             .contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(status().isAccepted());
     }
 
@@ -66,7 +66,7 @@ public class ScanControllerTest {
 
         Mockito.when(scanService.scan(Mockito.isA(InputStream.class))).thenReturn(new ClamAvResponse(false, ""));
 
-        mvc.perform(MockMvcRequestBuilders.multipart("/Scan").file(fileToScan).contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(
+        mvc.perform(MockMvcRequestBuilders.multipart("/scan").file(fileToScan).contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(
             status().isAccepted());
     }
 
@@ -77,7 +77,7 @@ public class ScanControllerTest {
 
         String idClient = "123456";
 
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.multipart("/Scan").file(fileToScan).queryParam("idClient", idClient)
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.multipart("/scan").file(fileToScan).queryParam("idClient", idClient)
             .contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(status().isNotAcceptable()).andReturn();
 
         String expectedResponseBody =
