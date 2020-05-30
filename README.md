@@ -16,7 +16,7 @@ It is a spring boot application with all requirements to be deployed in kubernet
 
 ## How does it works
 
-This spring boot application offer an api with the `/Scan` endpoint.
+This spring boot application offer an api with the `/scan` endpoint.
 
 This endpoint must be used with 2 parameters :
 
@@ -26,7 +26,7 @@ This endpoint must be used with 2 parameters :
 You can use this curl command line to test service :
 
 ```bash
-curl -X POST "http://localhost:8080/Scan?idClient=12345" -H "accept: */*" -H "Content-Type: multipart/form-data" -F "file=@yourfile;type=application/json"
+curl -X POST "http://localhost:8080/scan?idClient=12345" -H "accept: */*" -H "Content-Type: multipart/form-data" -F "file=@yourfile;type=application/json"
 ```
 
 

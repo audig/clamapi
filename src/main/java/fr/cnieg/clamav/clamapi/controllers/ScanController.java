@@ -29,7 +29,7 @@ public class ScanController {
     @Autowired
     ScanService scanService;
 
-    @PostMapping(path = "/Scan", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
+    @PostMapping(path = "/scan", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public ResponseEntity scan(@RequestParam(defaultValue = "UNDEFINED") String idClient, MultipartFile file) throws IOException {
         ClamAvResponse clamAvResponse = scanService.scan(file.getInputStream());
