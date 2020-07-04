@@ -51,4 +51,10 @@ Some custom metrics are available at `/actuator/prometheus`:
 
 ## Deployment with helm in kubernetes
 
-TODO
+Can be deployed with helm :
+```bash
+helm repo add github-cnieg https://cnieg.github.io/helm-charts
+helm install github-cnieg/clamapi --name clamapi --namespace clamapi
+```
+
+Configuration available in `values.yaml` at https://github.com/cnieg/helm-charts/blob/master/charts/clamapi/values.yaml
