@@ -18,7 +18,7 @@ configurations {
     }
 }
 ext {
-    junit5Version = '5.6.2'
+    junit5Version = '5.7.0'
 }
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
