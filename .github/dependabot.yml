@@ -1,0 +1,39 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 99
+  ignore:
+  - dependency-name: org.springdoc:springdoc-openapi-ui
+    versions:
+    - 1.5.3
+    - 1.5.4
+    - 1.5.5
+    - 1.5.6
+    - 1.5.7
+  - dependency-name: org.springframework.boot
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: io.micrometer:micrometer-registry-prometheus
+    versions:
+    - 1.6.3
+    - 1.6.4
+    - 1.6.5
+  - dependency-name: com.google.cloud.tools.jib
+    versions:
+    - 2.7.1
+    - 2.8.0
+  - dependency-name: org.junit.jupiter:junit-jupiter-engine
+    versions:
+    - 5.7.0
+  - dependency-name: org.junit.jupiter:junit-jupiter-api
+    versions:
+    - 5.7.0
+  - dependency-name: org.junit.jupiter:junit-jupiter-params
+    versions:
+    - 5.7.0
