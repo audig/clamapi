@@ -16,7 +16,7 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 5MB
-      
+
 springdoc:
   api-docs.enabled: false
 
@@ -32,7 +32,9 @@ management:
       exposure:
         include: 'info,health,prometheus'
   health:
-    probes:
+    livenessstate:
+      enabled: true
+    readynessstate:
       enabled: true
   endpoint:
     prometheus:
@@ -45,4 +47,6 @@ management:
           include:
             - readinessState
             - clamaAvConnection
+      probes:
+        enabled: true
 
